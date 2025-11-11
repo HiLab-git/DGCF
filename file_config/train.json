@@ -1,0 +1,98 @@
+{
+    "phase": "train",
+    "random_seed": 42,
+    "dataset": {
+        // "dir_A": "SynthRAD2023/Task1/pelvis/2D/segmentation/prior/trainB", // 
+        "dataloader": {
+            "batch_size": 4,
+            "shuffle": true,
+            "num_workers": 4
+        },
+        "max_size": 1000000,
+        "random_sample": true,
+        "dataset_mode": "aligned2D"
+        // "dataset_mode": "unaligned"
+    },
+    "model": {
+        "start_epoch": 1,  
+        "lr_policy": "step", //
+        "l_decay_flat": 30, // linear decay中 无linear学习率衰减的前半部分epoch
+        "l_decay_down": 0, //linear decay中 linear学习率衰减的后部分epoch
+        "n_epochs":20,
+        "lr_decay_epoch": 5,
+        "cos_decay_cycle": 50, 
+        "step_decay_descent": 50, // step decay中每隔step_decay_descent个epoch乘一个衰减因子gamma
+        "use_mask": false, // 是否使用mask
+        "use_graph_smooth": false,
+        "use_localvar_balance": false,
+        "localvar_balance_weight": 10,
+        "L1_weight": 1,
+        "beta": 0,
+        "use_hiseq": false,
+        "hiseq_weight": 1.0, // 权重,
+        "use_freq": false
+    },
+    "preprocess":{
+        "crop":{
+            "use_crop": false,
+            "crop_size": [288,288] // [width, height]
+        },
+        "flip":{
+            "use_flip": false,
+            "flip_direction": "h",
+            "flip_prob": 0.5
+        },
+        "rotation":{
+            "use_rotation": false,
+            "rotation_angle": 90, // 旋转角度
+            "rotation_prob": 0.5 // 旋转概率
+        },
+        "norm":{
+            "meanstd_disturbance_A": false,
+            "meanstd_disturbance_ratio_A": [0.5, 0.5] // mean and std
+        }
+    },
+    "network": {
+        "lr": 0.0002,
+        "beta1": 0.99,
+        "lambda_L1": 1
+    },
+    "record": {
+        "record_loss_per_iter": 500, //每训练500个iter展示一次损失
+        "val_per_epoch": 1,
+        "save_model":{
+            "per_epoch": 5, // 每5个epoch保存一次模型
+            "save_best": true, // 是否保存最好的模型
+            "best_metric": "ssim", // 保存最好的模型的指标
+            "save_latest": true // 是否保存最新的模型
+        }
+    },
+    "validation": {
+        "phase": "validation",
+        "dataset":{
+                // "dir_A": "SynthRAD2023/Task1/pelvis/2D/segmentation/prior/validationB", // 
+                "dataset_mode": "aligned2D"
+            },
+        "preprocess":{
+            "crop":{
+                "use_crop": false
+            },
+            "flip":{
+            "use_flip": false
+            },
+            "rotation":{
+            "use_rotation": false
+            },
+            "norm":{
+            "meanstd_disturbance_A": false
+        }
+        }
+    },
+    "MCL":{
+        "use_MCL": false, // 是否使用MCL
+        "class_mask": "realtime_man",
+        "class_mask_range": [[-1024,2000],[-250,250],[250,2000]],
+        "class_weight": [1, 1, 1], // 每个类别的权重
+        "class_norm": true
+    }
+}

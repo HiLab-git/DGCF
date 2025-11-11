@@ -1,0 +1,96 @@
+{
+    "dataset": {
+        "dataroot": "./file_dataset",
+        "info":{
+            "name": "SynthRAD2023",
+            // "name": ["SynthRAD2025","SynthRAD2023","FLARE2022"],
+            // "task": ["Task1","Task2"],
+            "task": "Task1",
+            // "organ": ["HN","AB","TH"]
+            "organ": "pelvis"
+            // "center": "A",
+        }, 
+        "dim": "2D",
+        "z_pad": 2,
+        // "dataset_mode": "selfsuped",
+        "dataset_mode": "aligned2D",
+        "data_format": ".nii.gz",
+        "image_channel": 1,
+        "patch_wise": {
+            "use_patch_wise": false,
+            "patch_size": [128, 128, 128], // pd,ph,pw
+            "patch_stride": [64, 64, 64] // sd,sh,sw
+        }
+    },
+    "continue": {
+        "continue_train": false,// 是否继续训练
+        "continue_model_dir": "file_record/SynthRAD2025/Task1_Task2/HN_AB_TH/2D/ss/UNet_cbct/20250720_184511/models", // 继续训练的模型目录
+        "continue_epoch": "best" // 继续训练的epoch
+    },
+    "model": {
+        "model_name": "vanillaSL",
+        "dim": "2D",
+        "predict": "all",
+        "pretext_tasks": {
+            "task_names": ["MAE"],
+            "MAE":{
+                "mask_ratio": 0.8 // mask ratio for MAE
+            }
+        },
+        "use_ft16": false
+    },
+    "preprocess":{
+        "resize":{
+            "use_resize": true,
+            "resize_size": [256,256], // [h,w] for 2D, [d,h,w] for 
+            // Task1 HN(304,336), AB(432,464), TH(464,512)
+            // Task2 HN(320,320), AB(416,416), TH(400,416)
+            "resize_method": "BILINEAR"// BICUBIC/BILINEAR
+        },
+        "clip":{
+            "use_clip_A": true,
+            "use_clip_B": true,
+            "clip_type_A": "99ptile", // MRI
+            "clip_level_A": "patient", // MRI
+            // "clip_level_A": "population", // CBCT
+            "clip_level_B": "population", // 
+            "clip_range_A": [-1024,2000], // 
+            "clip_range_B": [-1024,2000]  // 
+        },
+        "norm": {
+            "use_norm_A": true,
+            "use_norm_B": true,
+            "norm_type_A": "99ptile", // MRI
+            // "norm_type_A": "minmax", // CBCT
+            "norm_type_B": "minmax", // 
+            "norm_level_A": "patient", // MRI
+            // "norm_level_A": "population", // CBCT
+            "norm_level_B": "population", // 
+            // "norm_addition_A": "minmax",
+            "minmax_norm_range_A": [-1024,2000], // 
+            "minmax_norm_range_B": [-1024,2000],  // MRI
+            "meanstd_norm_ms_A": [0, 1], // mean and std
+            "meanstd_norm_ms_B": [0, 1] // mean and std
+        }
+    },
+    "network":{
+        "init_type": "normal",
+        "init_gain": 0.02 //scaling factor for normal, xavier and orthogonal
+    },
+    "record": {
+        "record_dir": "./file_record", //config["record"]["checkpoints_dir"]
+        "html":{
+            "use_html": true,
+            "display_per_iter": 10000, //
+            "display_size": 256 //
+        },
+        "tensorboard":{
+            "use_tensorboard": true,
+            "display_per_iter": 50 // 一个epoch中  每训练500个iter就展示一次结果到tensorboard上
+        }
+    },
+    "result":{
+        "result_dir": "./file_result",
+        "test_epoch": "best"
+    }
+}

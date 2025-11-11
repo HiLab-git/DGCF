@@ -1,0 +1,39 @@
+# pre-compile
+__pycache__/
+*.pyc
+# 
+# VSCode
+.vscode/
+*.code-workspace
+
+# pycharm
+.idea/
+
+# dataset
+/file_dataset
+
+# record
+/file_record
+
+# result
+/file_result
+
+# config
+# /file_config
+
+# /code_model
+
+# test
+/test
+
+
+# others
+/ct.nii.gz
+
+#
+/select_samples
+
+# 
+/totalseg
+
+

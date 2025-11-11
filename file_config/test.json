@@ -1,0 +1,49 @@
+{
+    "phase": "test",
+    "dataset": {
+        // "dir_A": "SynthRAD2023/Task1/brain/2D/segmentation/prior/testA2B", // 
+        "dataloader": {
+            "batch_size": 4,
+            "shuffle": false,
+            "num_workers": 4
+        },
+        "dim": "2D",
+        "max_size": 1000000,
+        "random_sample": false,
+        "data_format": ".nii.gz",
+        "dataset_mode": "aligned2D"
+    },
+    "model": {
+        "dim": "2D"
+    },
+    "record": {
+        "CAM": {
+            "use_CAM": false,
+            "display_CAM_per_iter": 10
+        },
+        "tensorboard":{
+            "use_tensorboard": false
+        },
+        "html":{
+            "use_html": false    
+        }
+    },
+    "result":{
+        "result_dir": "./file_result",
+        "test_epoch": "best",
+        "save_list": [
+            "fake_B"
+        ]
+        // "test_model_dir": "file_record/SynthRAD2023/Task1/brain/2D/UNet_prior2image/20251006_155926/models"
+    },
+    "reconstruction": {
+        "conduct_reconstruction": true,
+        "pattern_2D": "^(.+?)_(\\d+)_(real_A|real_B|fake_B)",
+        "pattern_patch": "^(.+?)_(\\d+)_(\\d+)_(\\d+)_(real_A|real_B|fake_B)"
+    },
+    "segmentation":{
+        "conduct_segmentation": true,
+        "task": "total",
+        "ml": true
+    }
+}

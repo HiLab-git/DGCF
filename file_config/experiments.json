@@ -1,0 +1,204 @@
+{
+    "work": "UNet",
+    "work_list": [ 
+        "UNet",
+        "DINODPT",
+        "DINOv3Net",
+        "rfpp",
+        "DDPM",
+        "pix2pix",
+        "cycleGAN",
+        "UNetPlusPlus",
+        "MEUNet",
+        "TEUNet",
+        "MambaUNet",
+        "ResNet"
+    ],
+    "UNet":{
+        "general":{
+            "name": "UNet", // experiments name
+            "model":{
+                "use_perceptual_loss": false,
+                "perceptual_loss_type": "l1", // l1 / mse / cosine
+                "perceptual_model": "dinov3_vitb16"
+            },
+            "network": {
+                "filename": "unet",
+                "netG": "unet",
+                "ngf": 64, 
+                "down_step": 4,
+                "activate": true
+            }
+        }
+    },
+    "DDPM":{
+        "general":{
+            "name": "DDPM_improved", // experiments name
+            "model":{
+                "model_name": "DDPM",
+                "num_train_timesteps": 100,
+                "var_type": "learned_range"
+            }
+        }
+    },
+    "DINOv3Net":{
+        "general":{
+            "name": "DINOv3Net_no_projector_no_fusion", // experiments name
+            "dataset":{
+                "dataset_mode": "dinov3"
+            },
+            "model":{
+                "model_name": "dinov3Net",          
+                "use_perceptual_loss": false,
+                "perceptual_loss_type": "l1", // l1 / mse / cosine
+                "perceptual_model": "dinov3_vitb16",
+                "perceptual_multi_resolution": false,
+                "perceptual_multi_layers": [true,true,true,true]
+            },
+            "network": {
+                "filename": "dinov3.dinoplusdecoder",
+                "netG": "DINOv3MultiScaleDecoder",
+                "model_name": "dinov3_vitb16",
+                "ngf": 64,
+                "use_dino_layers": [true,true,true,true],
+                "use_cnn": true,
+                "fusion_type": "none" 
+            }
+        }
+    },
+    "rfpp":{
+        "general":{
+            "name": "rfpp_unet_1", // experiments name
+            "model":{
+                "model_name": "i2irf",
+                "forward_times": 1,
+                "N": 1,
+                "solver": "euler",
+                "use_source_aid": false,
+                "use_fixed_t": false,
+                "use_intensity_mapper":true,
+                "deep_supervision": false
+            },
+            "network": {
+                "filename": "rf",
+                "netG": "unet_song_t",
+                "ngf": 64, 
+                "down_step": 4,
+                "activate": true,
+                "bilinear": false
+            }
+        }
+    },
+    "pix2pix":{
+        "general":{
+            "name": "pix2pix_lsgan_basic", // experiments name
+            "model": {
+                "model_name": "pix2pix"
+            },
+            "network": {
+                "filename": "unet",
+                "filename_d": "discriminator",
+                "netG": "unet",
+                "ngf": 64, 
+                "down_step": 4,
+                "activate": true,
+                "netD": "basic",
+                "gan_mode": "lsgan",
+                "ndf": 64
+            }
+        }
+    },
+    "cycleGAN":{
+        "general":{
+            "name": "cycleGAN_lsgan_basic", // experiments name
+            "model": {
+                "model_name": "cycleGAN",
+                "pool_size": 50
+            },
+            "network": {
+                "filename": "resnet",
+                "filename_d": "discriminator",
+                "netG": "resnet",
+                "ngf": 64, 
+                "netD": "basic",
+                "gan_mode": "lsgan",
+                "ndf": 64,
+                "lambda_A": 10,
+                "lambda_B": 10,
+                "lambda_idt": 0.5
+            }
+        }
+    },
+    "UNetPlusPlus": {
+        "general":{
+            "name": "unetplusplus", // experiments name
+            "model": {
+                "model_name": "vanillaSL",
+                "deep_supervision": false
+            },
+            "network": {
+                "filename": "unet",
+                "netG": "unetplusplus"
+            }
+        }
+    },
+    "MEUNet": {
+        "general": {
+            "name": "MEUNet", // experiments name
+            "model": {
+                "model_name": "vanillaSL"
+            },
+            "network": {
+                "filename": "xeunet",
+                "netG": "meunet",
+                "ngf": 64, //the number of filters in the last conv layer
+                "down_step": 2,
+                "norm": "batch", // instance / layer / batch
+                "patch_sizes": [8,4,2,1],
+                "mamba_blocks": [16,8,4,2],
+                "residual": true
+            }
+        }
+    },
+    "TEUNet":{
+        "general": {
+            "name": "TEUNet", // experiments name
+            "model": {
+                "model_name": "vanillaSL"
+            },
+            "network": {
+                "filename": "xeunet",
+                "netG": "teunet",
+                "ngf": 64, //the number of filters in the last conv layer
+                "down_step": 2,
+                "norm": "batch", // instance / layer / batch
+                "patch_sizes": [8,4,2,1],
+                "transformer_depths": [16,8,4,2],
+                "residual": true
+            }
+        }
+    },
+    "MambaUNet":{
+        "general":{
+            "name": "MambaUNet", // experiments name
+            "model": {
+                "gpu_ids": [2]
+            },
+            "network": {
+                "filename": "mambaunet",
+                "netG": "mambaunet",
+                "patch_size": 8
+            }
+        }
+    },
+    "ResNet":{
+        "general":{
+            "name": "ResNet", // experiments name
+            "network": {
+                "filename": "resnet",
+                "netG": "resnet",
+                "ngf": 64 //the number of filters in the last conv layer
+            }
+        }
+    }
+}

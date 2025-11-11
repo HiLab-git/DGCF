@@ -1,0 +1,26 @@
+{   
+    "name": "DINOv3Net_percep_dinov3_b_single_layer",
+    "dataset":{
+        // "dir_A": "SynthRAD2023/Task1/brain/3D/segmentation/prior/testA2B"
+    },
+    "reconstruction": {
+        "conduct_reconstruction": false,
+        "pattern": "^(.+?)_(\\d+)_(real_A|real_B|fake_B)" 
+    },
+    "metrics":{
+        // "pattern": "^[1-2](AB|HN|TH)[A-E]\\d{3}",
+        "pattern": "^[1-2][B|P][A-C]\\d{3}$",
+        "image_similarity":{
+            "calculate_metrics": true,
+            "metric_names": ["SSIM","PSNR"],
+            "dynamic_range": [-1024, 2000],
+            // "pattern": "^[1-2](HN)[A-E]\\d{3}",
+            // "pattern": "^[1-2][B|P][A-C]\\d{3}$"
+            "class_range": [[-1024,-250],[-250,250],[250,2000]]
+        }
+    },
+    "result":{
+        "result_dir": "./file_result",
+        "test_epoch": "best"
+    }
+}
