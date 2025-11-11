@@ -118,8 +118,6 @@ Model references:
 * MambaUNet
 * SwinUNet
 * UNet++
-* Grad-CAM
-* WTConv: [https://github.com/bgu-cs-vil/wtconv](https://github.com/bgu-cs-vil/wtconv)
 
 ---
 
